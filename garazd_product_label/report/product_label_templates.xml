@@ -148,47 +148,42 @@
     </template>
 
     <template id="label_50x25">
-        <div style="width: 100%; height: 100%; padding: 1.5mm 2.5mm; box-sizing: border-box; overflow: hidden; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-            <!-- Header Row: Product Name & Price -->
-            <div style="width: 100%; overflow: hidden; height: 16px; margin-bottom: 2px;">
-                <div style="float: left; width: 62%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; font-weight: bold; color: #111111; line-height: 1.2; text-align: left;">
-                    <span t-field="label.product_id.name"/>
-                </div>
-                <div style="float: right; width: 38%; font-size: 13px; font-weight: 900; color: #000000; text-align: right; line-height: 1.1;">
-                    <span t-if="label.product_id.currency_id.position == 'before'" t-field="label.product_id.currency_id.symbol"/>
-                    <span t-field="label.product_id.lst_price"/>
-                    <span t-if="label.product_id.currency_id.position == 'after'" t-field="label.product_id.currency_id.symbol"/>
-                </div>
+        <div style="position: relative; width: 100%; height: 25mm; max-height: 25mm; box-sizing: border-box; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #ffffff;">
+            <!-- Top Left: Product Name -->
+            <div style="position: absolute; top: 1.0mm; left: 2.5mm; right: 26mm; max-height: 9.0mm; overflow: hidden; font-size: 11px; font-weight: bold; color: #000000; line-height: 1.15; text-align: left;">
+                <span t-field="label.product_id.name"/>
+                <t t-if="label.product_id.product_template_attribute_value_ids">
+                    , <span t-out="u', '.join(map(lambda x: x.name, label.product_id.product_template_attribute_value_ids))"/>
+                </t>
             </div>
 
-            <!-- Sub-info: Attributes & Internal Ref Code -->
-            <div style="width: 100%; overflow: hidden; height: 13px; margin-bottom: 2px;">
-                <div style="float: left; width: 60%; font-size: 8.5px; color: #555555; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                    <t t-if="label.product_id.product_template_attribute_value_ids">
-                        <span t-out="u', '.join(map(lambda x: x.name, label.product_id.product_template_attribute_value_ids))"/>
-                    </t>
-                    <t t-elif="label.company_id">
-                        <span t-field="label.company_id.name"/>
-                    </t>
-                </div>
-                <div t-if="label.product_id.default_code" style="float: right; width: 40%; font-size: 8px; font-weight: 700; color: #222222; text-align: right;">
-                    <span style="background: #eef1f5; border-radius: 2px; padding: 1px 3px;" t-field="label.product_id.default_code"/>
-                </div>
+            <!-- Top Right: Sales Price -->
+            <div style="position: absolute; top: 0.6mm; right: 2.5mm; font-size: 19px; font-weight: 900; color: #000000; line-height: 1.0; text-align: right; white-space: nowrap;">
+                <span t-if="label.product_id.currency_id.position == 'before'" t-field="label.product_id.currency_id.symbol"/>
+                <span t-field="label.product_id.lst_price"/>
+                <span t-if="label.product_id.currency_id.position == 'after'" t-field="label.product_id.currency_id.symbol"/>
             </div>
 
-            <!-- Hairline Divider -->
-            <div style="width: 100%; border-top: 1px dashed #cccccc; margin: 1px 0 2px 0;"/>
+            <!-- Middle Left: Company Name / Internal Ref -->
+            <div style="position: absolute; top: 10.8mm; left: 2.5mm; right: 2.5mm; font-size: 8.5px; font-weight: 600; color: #444444; line-height: 1.1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                <t t-if="label.company_id">
+                    <span t-field="label.company_id.name"/>
+                </t>
+                <t t-elif="label.product_id.default_code">
+                    <span t-field="label.product_id.default_code"/>
+                </t>
+            </div>
 
-            <!-- Barcode Section -->
-            <div style="width: 100%; text-align: center; overflow: hidden;">
+            <!-- Bottom: Barcode Graphic & Digits -->
+            <div style="position: absolute; bottom: 0.4mm; left: 2.5mm; right: 2.5mm; text-align: center;">
                 <t t-if="label.product_id.barcode">
-                    <div t-out="label.product_id.barcode" style="margin: 0 auto; width: 100%;" t-options="{'widget': 'barcode', 'quiet': 0, 'symbology': 'auto', 'img_style': 'overflow: hidden; width: 100%; height: 1.1rem;'}"/>
+                    <div t-out="label.product_id.barcode" style="margin: 0 auto; width: 100%; line-height: 0;" t-options="{'widget': 'barcode', 'quiet': 0, 'symbology': 'auto', 'img_style': 'overflow: hidden; width: 100%; height: 1.15rem; display: block; margin: 0 auto;'}"/>
                     <div style="font-size: 8.5px; font-weight: bold; font-family: 'Courier New', Courier, monospace; letter-spacing: 1px; text-align: center; margin-top: 1px; color: #000000; line-height: 1.0;">
                         <span t-field="label.product_id.barcode"/>
                     </div>
                 </t>
                 <t t-else="">
-                    <div style="font-size: 9px; color: #999999; font-style: italic; padding-top: 2px;">No Barcode</div>
+                    <div style="font-size: 8px; color: #999999; font-style: italic;">No Barcode</div>
                 </t>
             </div>
         </div>
@@ -196,50 +191,55 @@
 
     <template id="report_product_label_50x25_2col_template">
         <t t-call="web.html_container">
-            <t t-call="web.basic_layout">
-                <style type="text/css">
-                    body, html {
-                        margin: 0 !important;
-                        padding: 0 !important;
-                    }
-                    .o_label_container {
-                        width: 100%;
-                        margin: 0 !important;
-                        padding: 0 !important;
-                    }
-                    .o_label_cell {
-                        margin: 0 !important;
-                        padding: 1mm 2mm !important;
-                        box-sizing: border-box;
-                        float: left;
-                        overflow: hidden;
-                    }
-                </style>
-                <t t-set="count" t-value="0" />
-                <div class="page o_label_container">
-                    <t t-foreach="docs" t-as="label">
-                        <t t-set="qty" t-value="1" />
-                        <t t-if="label.qty" t-set="qty" t-value="label.qty" />
-                        <t t-set="cols" t-value="label.wizard_id.cols or 2" />
-                        <t t-set="rows" t-value="label.wizard_id.rows or 1" />
-                        <t t-set="page_size" t-value="cols * rows" />
-                        <t t-set="col_width_pct" t-value="100.0 / cols" />
+            <style type="text/css">
+                @page {
+                    size: 100mm 25mm;
+                    margin: 0 !important;
+                }
+                html, body {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    width: 100% !important;
+                    height: 25mm !important;
+                    background: #ffffff !important;
+                }
+                .o_label_page {
+                    width: 100% !important;
+                    height: 25mm !important;
+                    max-height: 25mm !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    box-sizing: border-box !important;
+                    overflow: hidden !important;
+                    page-break-after: always !important;
+                    break-after: page !important;
+                }
+                .o_label_cell {
+                    width: 50% !important;
+                    height: 25mm !important;
+                    max-height: 25mm !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    box-sizing: border-box !important;
+                    float: left !important;
+                    overflow: hidden !important;
+                }
+            </style>
+            <t t-foreach="docs" t-as="label">
+                <t t-set="qty" t-value="1" />
+                <t t-if="label.qty" t-set="qty" t-value="label.qty" />
+                <t t-set="cols" t-value="label.wizard_id.cols or 2" />
 
-                        <t t-foreach="list(range(qty))" t-as="index_qty">
-                            <t t-if="count &gt; 0 and count % page_size == 0">
-                                <div style="page-break-after: always; clear: both;"/>
-                            </t>
-                            <t t-elif="count &gt; 0 and count % cols == 0">
-                                <div style="clear: both;"/>
-                            </t>
+                <t t-foreach="list(range(0, qty, cols))" t-as="i">
+                    <div class="page o_label_page">
+                        <t t-foreach="list(range(i, min(i + cols, qty)))" t-as="cell_idx">
                             <div class="o_label_cell"
-                                 t-att-style="'width: {}%; height: 25mm; border: {};'.format(col_width_pct, '%dpx solid #777;' % label.wizard_id.border_width if label.wizard_id.border_width else '0')">
+                                 t-att-style="'border: {};'.format('%dpx solid #777;' % label.wizard_id.border_width if label.wizard_id.border_width else '0')">
                                 <t t-call="garazd_product_label.label_50x25"/>
                             </div>
-                            <t t-set="count" t-value="count + 1" />
                         </t>
-                    </t>
-                </div>
+                    </div>
+                </t>
             </t>
         </t>
     </template>

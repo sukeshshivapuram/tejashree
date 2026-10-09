@@ -83,7 +83,7 @@
     </record>
 
     <record id="paperformat_label_50x25_2col" model="report.paperformat">
-        <field name="name">Label 50x25 mm (2 Columns Side-by-Side)</field>
+        <field name="name">Label 50x25 mm (2 Columns Side-by-Side - TSC TTP-224 Pro / TTP-244 Pro)</field>
         <field name="format">custom</field>
         <field name="page_height">25</field>
         <field name="page_width">100</field>
@@ -100,7 +100,7 @@
     </record>
 
     <record id="action_report_product_label_50x25_2col" model="ir.actions.report">
-        <field name="name">Product Labels 50x25 mm (2 Columns Side-by-Side)</field>
+        <field name="name">Product Labels 50x25 mm (2 Columns - TSC TTP-224 Pro / TTP-244 Pro)</field>
         <field name="model">print.product.label.line</field>
         <field name="report_type">qweb-pdf</field>
         <field name="paperformat_id" ref="paperformat_label_50x25_2col"/>

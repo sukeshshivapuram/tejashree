@@ -90,11 +90,15 @@ class PrintProductLabel(models.TransientModel):
         string='Labels for Products',
         default=_get_product_label_ids,
     )
+    @api.model
+    def _get_default_report_id(self):
+        return self.env.user.print_label_report_id or self.env.ref('garazd_product_label.action_report_product_label_50x25_2col', raise_if_not_found=False)
+
     report_id = fields.Many2one(
         comodel_name='ir.actions.report',
         string='Label',
         domain=[('model', '=', 'print.product.label.line')],
-        default=lambda self: self.env.user.print_label_report_id,
+        default=_get_default_report_id,
     )
     is_template_report = fields.Boolean(compute='_compute_is_template_report')
     qty_per_product = fields.Integer(
