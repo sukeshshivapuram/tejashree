@@ -148,7 +148,7 @@
     </template>
 
     <template id="label_50x25">
-        <div style="position: relative; width: 100%; height: 25mm; max-height: 25mm; box-sizing: border-box; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #ffffff;">
+        <div style="position: relative; width: 100%; height: 24.8mm; max-height: 25mm; box-sizing: border-box; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #ffffff;">
             <!-- Top Left: Product Name -->
             <div style="position: absolute; top: 1.0mm; left: 2.5mm; right: 26mm; max-height: 9.0mm; overflow: hidden; font-size: 11px; font-weight: bold; color: #000000; line-height: 1.15; text-align: left;">
                 <span t-field="label.product_id.name"/>
@@ -165,7 +165,7 @@
             </div>
 
             <!-- Middle Left: Company Name / Internal Ref -->
-            <div style="position: absolute; top: 10.8mm; left: 2.5mm; right: 2.5mm; font-size: 8.5px; font-weight: 600; color: #444444; line-height: 1.1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+            <div style="position: absolute; top: 10.5mm; left: 2.5mm; right: 2.5mm; font-size: 8.5px; font-weight: 600; color: #444444; line-height: 1.1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                 <t t-if="label.company_id">
                     <span t-field="label.company_id.name"/>
                 </t>
@@ -191,54 +191,60 @@
 
     <template id="report_product_label_50x25_2col_template">
         <t t-call="web.html_container">
-            <style type="text/css">
-                @page {
-                    size: 100mm 25mm;
-                    margin: 0 !important;
-                }
-                html, body {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    width: 100% !important;
-                    height: 25mm !important;
-                    background: #ffffff !important;
-                }
-                .o_label_page {
-                    width: 100% !important;
-                    height: 25mm !important;
-                    max-height: 25mm !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    box-sizing: border-box !important;
-                    overflow: hidden !important;
-                    page-break-after: always !important;
-                    break-after: page !important;
-                }
-                .o_label_cell {
-                    width: 50% !important;
-                    height: 25mm !important;
-                    max-height: 25mm !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    box-sizing: border-box !important;
-                    float: left !important;
-                    overflow: hidden !important;
-                }
-            </style>
-            <t t-foreach="docs" t-as="label">
-                <t t-set="qty" t-value="1" />
-                <t t-if="label.qty" t-set="qty" t-value="label.qty" />
-                <t t-set="cols" t-value="label.wizard_id.cols or 2" />
+            <t t-call="web.basic_layout">
+                <style type="text/css">
+                    @page {
+                        size: 100mm 25mm;
+                        margin: 0 !important;
+                    }
+                    html, body {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        width: 100% !important;
+                        height: 25mm !important;
+                        background: #ffffff !important;
+                    }
+                    .o_label_page {
+                        width: 100% !important;
+                        height: 24.8mm !important;
+                        max-height: 25mm !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        box-sizing: border-box !important;
+                        overflow: hidden !important;
+                        page-break-inside: avoid !important;
+                        break-inside: avoid !important;
+                    }
+                    .o_label_page:not(:last-child) {
+                        page-break-after: always !important;
+                        break-after: page !important;
+                    }
+                    .o_label_cell {
+                        width: 50% !important;
+                        height: 24.8mm !important;
+                        max-height: 25mm !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        box-sizing: border-box !important;
+                        float: left !important;
+                        overflow: hidden !important;
+                    }
+                </style>
+                <t t-foreach="docs" t-as="label">
+                    <t t-set="qty" t-value="1" />
+                    <t t-if="label.qty" t-set="qty" t-value="label.qty" />
+                    <t t-set="cols" t-value="label.wizard_id.cols or 2" />
 
-                <t t-foreach="list(range(0, qty, cols))" t-as="i">
-                    <div class="page o_label_page">
-                        <t t-foreach="list(range(i, min(i + cols, qty)))" t-as="cell_idx">
-                            <div class="o_label_cell"
-                                 t-att-style="'border: {};'.format('%dpx solid #777;' % label.wizard_id.border_width if label.wizard_id.border_width else '0')">
-                                <t t-call="garazd_product_label.label_50x25"/>
-                            </div>
-                        </t>
-                    </div>
+                    <t t-foreach="list(range(0, qty, cols))" t-as="i">
+                        <div class="page o_label_page">
+                            <t t-foreach="list(range(i, min(i + cols, qty)))" t-as="cell_idx">
+                                <div class="o_label_cell"
+                                     t-att-style="'border: {};'.format('%dpx solid #777;' % label.wizard_id.border_width if label.wizard_id.border_width else '0')">
+                                    <t t-call="garazd_product_label.label_50x25"/>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
                 </t>
             </t>
         </t>
